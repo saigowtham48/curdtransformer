@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use Laravel\Passport\HasApiTokens;
+use Maatwebsite\Excel\Facades\Excel;
 
 use Validator;
 use App\User;
@@ -103,7 +104,7 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (empty($user)) {
-             return response('Record not found', 200)->header('Content-Type', 'text/plain');
+            return response('Record not found', 200)->header('Content-Type', 'text/plain');
         }
 
         $result = $user->deleteUser($id);
@@ -113,6 +114,27 @@ class UserController extends Controller
         } else {
              return response('Failed to delete user!', 200)->header('Content-Type', 'text/plain');
         }
+
+    }
+    /**
+     * upload excel the given user.
+     *
+     * @param  request
+     * @return Response
+     */
+    public function uploadfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+                        'file' => 'required|max:5000|mimes:xlsx,xls'
+                    ]);
+        $validationFailed = $validator->fails();
+        $validationErrors = $validator->errors()->all();
+
+        if ($validationFailed) {
+            $this->output($request, false, $validationErrors, 200, 'Failed to upload');
+            exit;
+        }
+        $result = User::importExcel($request);
 
     }
 

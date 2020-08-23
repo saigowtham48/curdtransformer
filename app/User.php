@@ -7,6 +7,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Facades\Request;
+
+use Maatwebsite\Excel\Facades\Excel;
+use App\imports\UserImport;
 
 class User extends Authenticatable
 {
@@ -73,4 +77,12 @@ class User extends Authenticatable
         }
 
     }
+
+    public static function importExcel($request) {
+        $headers = ['Action', 'Name', 'Email', 'Password'];
+
+       $file = $request->file('file');
+       $result = Excel::import(new UserImport, $file);
+
+   }
 }

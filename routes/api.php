@@ -20,5 +20,6 @@ use Illuminate\Http\Request;
 Route::post('/login', 'LoginController@login')->name('login');
 Route::middleware('auth:api')->get('/user', 'UserController@index')->name('index');
 Route::post('/user', 'UserController@store')->name('store');
-Route::middleware('auth:api')->post('/user/update/{id}', 'UserController@update')->name('update');
-Route::middleware('auth:api')->get('/user/delete/{id}', 'UserController@destroy')->name('destroy');
+Route::middleware('auth:api')->put('/user/update/{id}', 'UserController@update')->name('update');
+Route::middleware('auth:api')->delete('/user/{id}', 'UserController@destroy')->name('destroy');
+Route::post('/upload', 'UserController@uploadfile')->name('uploadfile');
