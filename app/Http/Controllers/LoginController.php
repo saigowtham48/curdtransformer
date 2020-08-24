@@ -34,6 +34,7 @@ class LoginController extends Controller
         } else {
 			$token = $user->createToken('accces_token')->accessToken;
         }
-        return response(['data' => new UserResource($user), 'authToken' => $token]);
+
+        return response(['data' => new UserResource($user), 'authToken' => $token, 'success' => true]);
     }
 }

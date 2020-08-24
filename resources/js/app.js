@@ -37,7 +37,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
   
 Vue.use(VueRouter);
-
 import axios from 'axios'
 import VueAxios from 'vue-axios'
  
@@ -45,6 +44,9 @@ Vue.use(VueAxios, axios);
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
+import Paginate from 'vuejs-paginate'
+Vue.component('paginate', Paginate)
+import createPersistedState from 'vuex-persistedstate';
 const routes = [
   { path: '/', component: require('./components/ExampleComponent.vue').default },
   { path: '/user', component: require('./components/User.vue').default },
@@ -58,13 +60,30 @@ const router = new VueRouter({
 
   const store = new Vuex.Store({
   state: {
-    loggedin: false
+    loggedin: false,
+    token : ''
   },
+
   mutations: {
-    increment (state) {
-      state.count++
-    }
-  }
+	  setLogin(state, token) {
+	  	state.loggedin = token;
+	  },
+	  setToken(state, token) {
+	  	state.token = token;
+	  }
+  },
+  getters : {
+  	getloginstate : state => {
+	  	return state.loggedin;
+	  },
+	  gettoken : state => {
+	  	return state.token;
+	  }
+  },
+  actions : {
+
+  },
+  plugins: [createPersistedState()]
 })
 
 const app = new Vue({
